@@ -20,7 +20,7 @@ if(isset($_POST["user"])){
     $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
 	// FORM DATA ERROR HANDLING
 	if($user == "" || $p == ""){
-		header( "refresh:0;url=?err=missing" );
+		header( "refresh:0;url=?m=missing" );
         exit();
 	} else {
 	// END FORM DATA ERROR HANDLING
@@ -59,8 +59,8 @@ if(isset($_POST["user"])){
 <html>
 <head>
 <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Log In</title>
 
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -105,7 +105,7 @@ function login(){
 	var user = _("user").value;
 	var p = _("pass").value;
 	if(user == "" || p == ""){
-		window.location = "?err=missing";
+		window.location = "?m=missing";
 	} else {
 		var ajax = ajaxObj("POST", "index.php");
         ajax.onreadystatechange = function() {
@@ -113,7 +113,7 @@ function login(){
 	            if(ajax.responseText.trim() == "login_failed"){
 					_("loginbtn").style.display = "block";
 				} else if (ajax.responseText == "badpass"){
-					window.location = "?err="+ajax.responseText;
+					window.location = "?m="+ajax.responseText;
 				} else {
 					window.location = "user/?u="+ajax.responseText;
 				}
@@ -123,6 +123,7 @@ function login(){
 	}
 }
 </script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 </body>
 </html>
