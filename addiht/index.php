@@ -1,4 +1,5 @@
 <?php
+
 include_once("../php_includes/check_login_status.php");
 
 // Initialize any variables that the page might echo
@@ -11,7 +12,6 @@ $cl = "";
 $ph = "";
 $email = "";
 $lg = "";
-
 
 // Make sure the _SESSION username is set, and sanitize it
 if(isset($_SESSION["username"])){
@@ -61,9 +61,45 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="../css/site.css">
 <link rel="stylesheet" href="../css/bootstrap_alt.css">
-</head>
-<body>
+<script src="../js/main.js"></script>
+<script src="../js/ajax.js"></script>
+<script>
 
+function getTable() {
+	var m = _("meses").value;
+	if (m=="ns") {
+		_("status_panel").style.display = "block";
+		_("status_panel").className = "alert alert-warning";
+		_("status").innerHTML = "Por favor <strong>escolha um mês.</strong>";
+	} else {
+		var ajax = ajaxObj("POST", "ajax.php");
+		ajax.onreadystatechange = function() {
+			if(ajaxReturn(ajax) == true) {
+				_("status_panel").style.display = "block";
+				_("status_panel").className = "panel panel-default";
+				_("status").innerHTML = ajax.responseText;
+			}
+		}
+		ajax.send("m="+m);
+	}
+}
+
+function loadMonth(){
+	var d = new Date();
+	var n = d.getMonth();
+	if (n<=9){
+		document.getElementById("meses").selectedIndex="0" +n;
+		getTable()
+	} else {
+		document.getElementById("meses").selectedIndex=n;
+		getTable()
+	}
+}
+
+</script>
+
+</head>
+<body onload="loadMonth()">
 <!-- ---------------- START NAVBAR ---------------- -->
 
 
@@ -80,14 +116,14 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 				<span class="icon-bar"></span>
 			  </button>
 			 
-			  <a class="navbar-brand" rel="home" href="#" title="Inicio"><img src="../img/logo-w.png"   style="max-width:80px; margin-top: -7px;"></a>
+			  <a class="navbar-brand" rel="home" href="../" title="Inicio"><img src="../img/logo-w.png" style="max-width:80px; margin-top: -7px;"></a>
 			
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="../ihtmap/">Mapa de Horas</a></li>
-					<li><a href="../addiht/">Marcação de Horas</a></li>
+					<li><a href="../ihtmap">Mapa de Horas</a></li>
+					<li class="active"><a href="../">Marcação de Horas</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Escalas&nbsp<b class="caret"></b></a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -113,60 +149,52 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <!-- ---------------- END   NAVBAR ---------------- -->
 <!-- ---------------- START OF BODY ---------------- -->
 <br /><br /><br />
-<div class="container-fluid">
+<div class="container">
 	<div class="row">
-		<div class="col-xs-6 col-md-6 text-center">
-			<button type="button" class="btn btn-primary btn-lg" onclick="window.location = '../ihtmap/'">
-				Mapa de Horas&nbsp<span class="glyphicon glyphicon-time"></span>
-			</button>
+		<div class="col-md-4" align="center"></div>
+		<div class="col-md-4" align="center">
+			<form role="form">
+				<select id="meses" onchange="getTable()" class="form-control">
+					<option value="ns">Escolha o mês</option>
+					<option value="01">Janeiro</option>
+					<option value="02">Fevereiro</option>
+					<option value="03">Março</option>
+					<option value="04">Abril</option>
+					<option value="05">Maio</option>
+					<option value="06">Junho</option>
+					<option value="07">Julho</option>
+					<option value="08">Agosto</option>
+					<option value="09">Setembro</option>
+					<option value="10">Outubro</option>
+					<option value="11">Novembro</option>
+					<option value="12">Dezembro</option>
+				</select>
+			</form>
 		</div>
-		<div class="col-xs-6 col-md-6 text-center"><button type="button" class="btn btn-info btn-lg">Escala de Serviço&nbsp<span class="glyphicon glyphicon-list-alt"></span></button></div>
+		<div class="col-md-4" align="center"></div>
 	</div>
 	<br />
 	<div class="row">
-		<div class="col-xs-6 col-md-6 text-center"><button type="button" class="btn btn-success btn-lg" onclick="window.location = '../addiht/'">Marcação de Horas&nbsp<span class="glyphicon glyphicon-plus"></span></button></div>
-		<div class="col-xs-6 col-md-6 text-center"></div>
-		<div class="col-xs-6 col-md-6 text-center"></div>
+		<div class="col-md-12" align="center">
+			<div id="status_panel" class="panel panel-default" style="display: none">
+				<div id="status" class="panel-body">
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
 
 
+
 <!-- ---------------- SCRIPT LOADING ---------------- -->
 
-<script>
-function emptyElement(x){
-	_(x).innerHTML = "";
-}
 
-function login(){
-	var user = _("user").value;
-	var p = _("pass").value;
-	if(user == "" || p == ""){
-		window.location = "?err=missing";
-	} else {
-		var ajax = ajaxObj("POST", "index.php");
-        ajax.onreadystatechange = function() {
-	        if(ajaxReturn(ajax) == true) {
-	            if(ajax.responseText.trim() == "login_failed"){
-					_("loginbtn").style.display = "block";
-				} else if (ajax.responseText == "badpass"){
-					window.location = "?err="+ajax.responseText;
-				} else {
-					window.location = "user/?u="+ajax.responseText;
-				}
-	        }
-        }
-        ajax.send("user="+user+"&p="+p);
-	}
-}
-</script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
 
-
 <script src="../js/main.js"></script>
-<script src="../js/ajax.js"></script>
+
 <!-- ---------------- END OF SCRIPT LOADING ---------------- -->
 </body>
 </html>

@@ -12,13 +12,17 @@ if(isset($_POST["m"])){
 		echo "Failed to connect to MySQL: " . mysqli_connect_error();
 	}
 	
-	echo "<div class='table-responsive'><table class='table table-bordered'>
+	echo "<div class='table-responsive'><table class='table table-bordered table-hover table-condensed'>
 	<thead>
 	<th class='text-center'>Name</th>"; 
 	for ($x = 1; $x <= $numodays; $x++){ 
-		echo "<th class='text-center'>" . $x ."</th>";
+		if ($x <= 9){
+			echo "<th class='text-center'>0" . $x ."</th>";
+		} else {
+			echo "<th class='text-center'>" . $x ."</th>";
+		}
 	}
-	echo "</thead><tbody>";
+	echo "</thead><tbody class='table-hover'>";
 	
 	if ($result = mysqli_query($con, "SELECT id FROM members")) {
 
@@ -45,11 +49,8 @@ if(isset($_POST["m"])){
 					}
 				}
 			}
-				
 		}
-		
 	}
-
 	echo "</tr>";
 	echo "</table></div>";
 

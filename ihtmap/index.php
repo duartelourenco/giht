@@ -60,24 +60,46 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/bootstrap_alt.css">
 <script src="../js/main.js"></script>
 <script src="../js/ajax.js"></script>
 <script>
 
 function getTable() {
 	var m = _("meses").value;
-	var ajax = ajaxObj("POST", "ajax.php");
-	ajax.onreadystatechange = function() {
-		if(ajaxReturn(ajax) == true) {
-			_("status").innerHTML = ajax.responseText;
+	if (m=="ns") {
+		_("status_panel").style.display = "block";
+		_("status_panel").className = "alert alert-warning";
+		_("status").innerHTML = "Por favor <strong>escolha um mês.</strong>";
+	} else {
+		var ajax = ajaxObj("POST", "ajax.php");
+		ajax.onreadystatechange = function() {
+			if(ajaxReturn(ajax) == true) {
+				_("status_panel").style.display = "block";
+				_("status_panel").className = "panel panel-default";
+				_("status").innerHTML = ajax.responseText;
+			}
 		}
+		ajax.send("m="+m);
 	}
-	ajax.send("m="+m);
 }
+
+function loadMonth(){
+	var d = new Date();
+	var n = d.getMonth();
+	if (n<=9){
+		document.getElementById("meses").selectedIndex="0" +n;
+		getTable()
+	} else {
+		document.getElementById("meses").selectedIndex=n;
+		getTable()
+	}
+}
+
 </script>
 
 </head>
-<body>
+<body onload="loadMonth()">
 <!-- ---------------- START NAVBAR ---------------- -->
 
 
@@ -100,16 +122,13 @@ function getTable() {
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Link1</a></li>
-					<li><a href="#">Link2</a></li>
+					<li class="active"><a href="#">Mapa de Horas</a></li>
+					<li><a href="../addiht/">Marcação de Horas</a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Escalas&nbsp<b class="caret"></b></a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-							<li role="presentation" class="divider"></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Serviços</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Diárias</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -136,7 +155,7 @@ function getTable() {
 		<div class="col-md-4" align="center">
 			<form role="form">
 				<select id="meses" onchange="getTable()" class="form-control">
-					<option>Escolha o mês</option>
+					<option value="ns">Escolha o mês</option>
 					<option value="01">Janeiro</option>
 					<option value="02">Fevereiro</option>
 					<option value="03">Março</option>
@@ -157,10 +176,7 @@ function getTable() {
 	<br />
 	<div class="row">
 		<div class="col-md-12" align="center">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title"><strong>O mês vai práki....</strong></h3>
-				</div>
+			<div id="status_panel" class="panel panel-default" style="display: none">
 				<div id="status" class="panel-body">
 				</div>
 			</div>
@@ -177,7 +193,7 @@ function getTable() {
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
 
-
+<script src="../js/main.js"></script>
 
 <!-- ---------------- END OF SCRIPT LOADING ---------------- -->
 </body>
