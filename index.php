@@ -73,7 +73,10 @@ if(isset($_POST["user"])){
 
 <div class="container" id="body">
 	<form class="form-signin" role="form" id="loginform" onsubmit="return false;">
-		<h2 class="form-signin-heading" id="title">Login</h2>
+		
+		
+		
+		<img src="img/logo.png" class="img-thumbnail center-block" width="50%"><br /><br />
 		<input type="text" class="form-control" id="user" placeholder="Utilizador" required autofocus />
 		<input type="password" class="form-control" id="pass" placeholder="Password" required />
 		<br />
@@ -124,6 +127,7 @@ function login(){
 }
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
 
 </body>
 </html>

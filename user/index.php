@@ -78,7 +78,9 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			  </button>
-			  <a class="navbar-brand" href="#">Gestão de I.H.T.</a>
+			 
+			  <a class="navbar-brand" rel="home" href="#" title="Inicio"><img src="../img/logo-w.png"   style="max-width:80px; margin-top: -7px;"></a>
+			
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -111,79 +113,26 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 
 
 <!-- ---------------- END   NAVBAR ---------------- -->
-<div class="container">
-<br />
-<?php
-
-$month = date("n");
-$year = date("y");
-echo "<h1>" . $name . " / " . strftime('%B', strtotime($year.".".$month.".1")) . "</h1>";
-
-?>
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
-<br />
-a
-<br />
+<!-- ---------------- START OF BODY ---------------- -->
+<br /><br /><br />
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-6 col-md-6 text-center">
+			<button type="button" class="btn btn-primary btn-lg" onclick="window.location = '../horas/'">
+				Escalas <span class="glyphicon glyphicon-list-alt"></span>
+			</button>
+		</div>
+		<div class="col-xs-6 col-md-6 text-center"><button type="button" class="btn btn-info btn-lg">Horas <span class="glyphicon glyphicon-time"></span></button></div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-6 col-md-6 text-center"><button type="button" class="btn btn-default btn-lg">Extra <span class="glyphicon glyphicon-dashboard"></span></button></div>
+		<div class="col-xs-6 col-md-6 text-center"></div>
+		<div class="col-xs-6 col-md-6 text-center"></div>
+	</div>
 </div>
+
+
 
 <!-- ---------------- SCRIPT LOADING ---------------- -->
 
