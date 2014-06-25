@@ -19,7 +19,7 @@ if(isset($_SESSION["username"])){
 } else if(isset($_GET["u"])) {
 	$u=$_GET["u"];
 } else {
-	header( "refresh:0;url=http://localhost/tii/login.php?error=nologon" );
+	header( "refresh:0;url=../?m=nl" );
 	exit();
 }
 
@@ -31,7 +31,7 @@ $user_query = mysqli_query($db_conx, $sql);
 // Now make sure that user exists in the table
 $numrows = mysqli_num_rows($user_query);
 if($numrows < 1){
-	header( "refresh:0;url=http://localhost/tii/login.php?error=notuser" );	
+	header( "refresh:0;url=../?m=nu" );
     exit();	
 }
 
@@ -40,7 +40,7 @@ $isOwner = "no";
 if($u == $log_username && $user_ok == true){
 	$isOwner = "yes";
 } else {
-	header( "refresh:0;url=http://localhost/tii/?error=nologon" );
+	header( "refresh:0;url=../?m=nl" );
 	exit();
 }
 
@@ -84,25 +84,40 @@ function getTable() {
 	}
 }
 
-function loadMonth(){
-	var d = new Date();
-	var n = d.getMonth();
-	if (n<=9){
-		document.getElementById("meses").selectedIndex="0" +n;
-		getTable()
-	} else {
-		document.getElementById("meses").selectedIndex=n;
-		getTable()
-	}
+function dateByExt(dt){
+	
+	var date = new Date(dt);
+	
+	var d = date.getDate();
+	var m = date.getMonth();
+	var y = date.getFullYear();
+	var w = date.getDay();
+	if (d<10)
+	d="0"+d
+
+	var dayarray = new Array("Domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","Sábado");
+	var montharray = new Array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+	
+	_("tooltip").innerHTML = "<strong>"+dayarray[w]+", "+d+" de "+montharray[m]+" de "+y+"</strong>";
+}
+
+function loadDate(){
+	var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth() + 1;
+	var y = date.getFullYear();
+	if (d <= 9){ d = "0"+d	} else if (m <= 9) { m = "0"+m }
+	
+	var cdate = y + "-" + m + "-" + d;
+	_("date").value = cdate;
+	dateByExt(cdate);
 }
 
 </script>
 
 </head>
-<body onload="loadMonth()">
+<body onload="loadDate();">
 <!-- ---------------- START NAVBAR ---------------- -->
-
-
 <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
 	<div class="container">
 		<nav role="navigation">
@@ -122,8 +137,8 @@ function loadMonth(){
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="../ihtmap">Mapa de Horas</a></li>
-					<li class="active"><a href="../">Marcação de Horas</a></li>
+					<li class="active"><a href="#">Mapa de Horas</a></li>
+					<li><a href="../addiht/">Marcação de Horas</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Escalas&nbsp<b class="caret"></b></a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -144,8 +159,6 @@ function loadMonth(){
 		</nav>
 	</div>
 </header>
-
-
 <!-- ---------------- END   NAVBAR ---------------- -->
 <!-- ---------------- START OF BODY ---------------- -->
 <br /><br /><br />
@@ -154,42 +167,30 @@ function loadMonth(){
 		<div class="col-md-4" align="center"></div>
 		<div class="col-md-4" align="center">
 			<form role="form">
-				<select id="meses" onchange="getTable()" class="form-control">
-					<option value="ns">Escolha o mês</option>
-					<option value="01">Janeiro</option>
-					<option value="02">Fevereiro</option>
-					<option value="03">Março</option>
-					<option value="04">Abril</option>
-					<option value="05">Maio</option>
-					<option value="06">Junho</option>
-					<option value="07">Julho</option>
-					<option value="08">Agosto</option>
-					<option value="09">Setembro</option>
-					<option value="10">Outubro</option>
-					<option value="11">Novembro</option>
-					<option value="12">Dezembro</option>
-				</select>
+				<div class="input-group">
+					<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
+					<span id="tooltip" class="input-group-addon"></span>
+					
+				</div>
 			</form>
 		</div>
 		<div class="col-md-4" align="center"></div>
 	</div>
-	<br />
-	<div class="row">
-		<div class="col-md-12" align="center">
-			<div id="status_panel" class="panel panel-default" style="display: none">
-				<div id="status" class="panel-body">
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
-
-
-
 
 <!-- ---------------- SCRIPT LOADING ---------------- -->
 
+<script>
+function loadDate(){
+	var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth();
+	var y = date.getFullYear();
+	alert(d + "/" + m + "/" + y);
+}
 
+
+~</script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
 

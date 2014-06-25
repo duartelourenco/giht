@@ -80,7 +80,7 @@ if(isset($_POST["user"])){
 		<input type="text" class="form-control" id="user" placeholder="Utilizador" required autofocus />
 		<input type="password" class="form-control" id="pass" placeholder="Password" required />
 		<br />
-		<button class="btn btn-lg btn-primary btn-block" id="loginbtn" onclick="login()">Continuar</button>
+		<button class="btn btn-lg btn-primary btn-block" id="loginbtn" onclick="login()" data-loading-text="A entrar...">Continuar</button>
 		<br />
 		<?php include_once("php_includes/errors.php"); ?>
 		

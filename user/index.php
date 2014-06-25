@@ -19,7 +19,7 @@ if(isset($_SESSION["username"])){
 } else if(isset($_GET["u"])) {
 	$u=$_GET["u"];
 } else {
-	header( "refresh:0;url=http://localhost/tii/login.php?error=nologon" );
+	header( "refresh:0;url=../?m=nl" );
 	exit();
 }
 
@@ -31,7 +31,7 @@ $user_query = mysqli_query($db_conx, $sql);
 // Now make sure that user exists in the table
 $numrows = mysqli_num_rows($user_query);
 if($numrows < 1){
-	header( "refresh:0;url=http://localhost/tii/login.php?error=notuser" );	
+	header( "refresh:0;url=../?m=nu" );	
     exit();	
 }
 
@@ -40,7 +40,7 @@ $isOwner = "no";
 if($u == $log_username && $user_ok == true){
 	$isOwner = "yes";
 } else {
-	header( "refresh:0;url=http://localhost/tii/?error=nologon" );
+	header( "refresh:0;url=../?m=nl" );
 	exit();
 }
 
