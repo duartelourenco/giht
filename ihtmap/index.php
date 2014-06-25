@@ -177,8 +177,7 @@ function loadMonth(){
 	<div class="row">
 		<div class="col-md-12" align="center">
 			<div id="status_panel" class="panel panel-default" style="display: none">
-				<div id="status" class="panel-body">
-				</div>
+				<div id="status" class="panel-body"></div>
 			</div>
 		</div>
 	</div>

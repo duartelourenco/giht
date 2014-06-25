@@ -66,28 +66,22 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <script>
 
 function getTable() {
-	var m = _("meses").value;
-	if (m=="ns") {
-		_("status_panel").style.display = "block";
-		_("status_panel").className = "alert alert-warning";
-		_("status").innerHTML = "Por favor <strong>escolha um mês.</strong>";
-	} else {
-		var ajax = ajaxObj("POST", "ajax.php");
-		ajax.onreadystatechange = function() {
-			if(ajaxReturn(ajax) == true) {
-				_("status_panel").style.display = "block";
-				_("status_panel").className = "panel panel-default";
-				_("status").innerHTML = ajax.responseText;
-			}
+	var d = _("date").value;
+	var ajax = ajaxObj("POST", "ajax.php");
+	ajax.onreadystatechange = function() {
+		if(ajaxReturn(ajax) == true) {
+			_("status").innerHTML = ajax.responseText;
 		}
-		ajax.send("m="+m);
 	}
+	ajax.send("d="+d);
 }
 
 function dateByExt(dt){
 	
 	var date = new Date(dt);
-	
+	if (dt==""){
+		_("tooltip").innerHTML = "<strong>Introduza uma data</strong>&nbsp&nbsp&nbsp<span class='glyphicon glyphicon-arrow-right'>&nbsp</span>"
+	} else {
 	var d = date.getDate();
 	var m = date.getMonth();
 	var y = date.getFullYear();
@@ -99,6 +93,7 @@ function dateByExt(dt){
 	var montharray = new Array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
 	
 	_("tooltip").innerHTML = "<strong>"+dayarray[w]+", "+d+" de "+montharray[m]+" de "+y+"</strong>";
+	}
 }
 
 function loadDate(){
@@ -113,10 +108,25 @@ function loadDate(){
 	dateByExt(cdate);
 }
 
+	function addTable(){
+		var table = document.getElementById('addiht');
+		var row = table.insertRow(-1);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		cell1.innerHTML = "<select class='form-control' />";
+		cell2.innerHTML = "<select class='form-control' />";
+		cell3.innerHTML = "<select class='form-control' />";
+		cell4.innerHTML = "<select class='form-control' />";
+		cell5.innerHTML = "<select class='form-control' />";
+	}
+
 </script>
 
-</head>
-<body onload="loadDate();">
+</head> 
+<body onload="loadDate(); getTable();">
 <!-- ---------------- START NAVBAR ---------------- -->
 <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
 	<div class="container">
@@ -164,21 +174,37 @@ function loadDate(){
 <br /><br /><br />
 <div class="container">
 	<div class="row">
-		<div class="col-md-4" align="center"></div>
-		<div class="col-md-4" align="center">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
 			<form role="form">
 				<div class="input-group">
-					<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
 					<span id="tooltip" class="input-group-addon"></span>
-					
+					<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
 				</div>
 			</form>
 		</div>
 		<div class="col-md-4" align="center"></div>
 	</div>
+	<br /><br />
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-xl-12" align="center">
+			<div id="status_panel" class="panel panel-default" style="display: block">
+				<div id="status" class="panel-body"></div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <!-- ---------------- SCRIPT LOADING ---------------- -->
+
+<script>";
+
+</script>
+
+
 
 <script>
 function loadDate(){
@@ -188,7 +214,6 @@ function loadDate(){
 	var y = date.getFullYear();
 	alert(d + "/" + m + "/" + y);
 }
-
 
 ~</script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
