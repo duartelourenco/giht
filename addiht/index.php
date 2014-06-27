@@ -66,14 +66,25 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <script>
 
 function getTable() {
-	var d = _("date").value;
+
 	var ajax = ajaxObj("POST", "ajax.php");
 	ajax.onreadystatechange = function() {
 		if(ajaxReturn(ajax) == true) {
 			_("status").innerHTML = ajax.responseText;
 		}
 	}
-	ajax.send("d="+d);
+	ajax.send();
+}
+
+function addRow() {
+
+	var ajax = ajaxObj("POST", "row.php");
+	ajax.onreadystatechange = function() {
+		if(ajaxReturn(ajax) == true) {
+			_("scripting").innerHTML = ajax.responseText;
+		}
+	}
+	ajax.send("");
 }
 
 function dateByExt(dt){
@@ -107,21 +118,6 @@ function loadDate(){
 	_("date").value = cdate;
 	dateByExt(cdate);
 }
-
-	function addTable(){
-		var table = document.getElementById('addiht');
-		var row = table.insertRow(-1);
-		var cell1 = row.insertCell(0);
-		var cell2 = row.insertCell(1);
-		var cell3 = row.insertCell(2);
-		var cell4 = row.insertCell(3);
-		var cell5 = row.insertCell(4);
-		cell1.innerHTML = "<select class='form-control' />";
-		cell2.innerHTML = "<select class='form-control' />";
-		cell3.innerHTML = "<select class='form-control' />";
-		cell4.innerHTML = "<select class='form-control' />";
-		cell5.innerHTML = "<select class='form-control' />";
-	}
 
 </script>
 
@@ -175,14 +171,13 @@ function loadDate(){
 <div class="container">
 	<div class="row">
 		<div class="col-md-4"></div>
-		<div class="col-md-4">
-			<form role="form">
+			<div class="col-md-4" align="center">
 				<div class="input-group">
-					<span id="tooltip" class="input-group-addon"></span>
-					<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
+				
+				<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
+				 <span id="tooltip" class="input-group-addon"></span>
 				</div>
-			</form>
-		</div>
+			</div>
 		<div class="col-md-4" align="center"></div>
 	</div>
 	<br /><br />
@@ -195,27 +190,11 @@ function loadDate(){
 			</div>
 		</div>
 	</div>
-
+<button onClick='addTable()'>Push2</button>
 </div>
-
+<div id="scripting"></div>
 <!-- ---------------- SCRIPT LOADING ---------------- -->
 
-<script>";
-
-</script>
-
-
-
-<script>
-function loadDate(){
-	var date = new Date();
-	var d = date.getDate();
-	var m = date.getMonth();
-	var y = date.getFullYear();
-	alert(d + "/" + m + "/" + y);
-}
-
-~</script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
 
