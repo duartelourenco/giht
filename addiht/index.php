@@ -63,7 +63,10 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
 <link rel="stylesheet" href="../css/bootstrap_alt.css">
 <script src="../js/main.js"></script>
 <script src="../js/ajax.js"></script>
+
 <script>
+
+
 
 function getTable() {
 
@@ -76,47 +79,84 @@ function getTable() {
 	ajax.send();
 }
 
-function addRow() {
 
-	var ajax = ajaxObj("POST", "row.php");
-	ajax.onreadystatechange = function() {
-		if(ajaxReturn(ajax) == true) {
-			_("scripting").innerHTML = ajax.responseText;
+
+function addTable() {
+	
+	var table = _('addiht');
+	var inc = table.rows.length;
+	if (inc > 10) {
+		_("statusbutton").style.visibility = "hidden";
+	} else {
+		var row = table.insertRow(-1);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		
+		var ajax = ajaxObj("POST", "row.php");
+		ajax.onreadystatechange = function() {
+			if(ajaxReturn(ajax) == true) {
+				eval(ajax.responseText);
+			}
 		}
+		ajax.send("i="+inc);
+		
+		cell2.innerHTML = "<select class='form-control'></select>";
+		cell3.innerHTML = "<select class='form-control'></select>";
+		cell4.innerHTML = "<select class='form-control'></select>";
+		cell5.innerHTML = "<select class='form-control'></select>";
 	}
-	ajax.send("");
 }
 
-function dateByExt(dt){
+function dateByExt(dt) {
 	
 	var date = new Date(dt);
 	if (dt==""){
 		_("tooltip").innerHTML = "<strong>Introduza uma data</strong>&nbsp&nbsp&nbsp<span class='glyphicon glyphicon-arrow-right'>&nbsp</span>"
 	} else {
-	var d = date.getDate();
-	var m = date.getMonth();
-	var y = date.getFullYear();
-	var w = date.getDay();
-	if (d<10)
-	d="0"+d
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		var w = date.getDay();
+		if (d<10)
+		d="0"+d
 
-	var dayarray = new Array("Domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","Sábado");
-	var montharray = new Array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
-	
-	_("tooltip").innerHTML = "<strong>"+dayarray[w]+", "+d+" de "+montharray[m]+" de "+y+"</strong>";
+		var dayarray = new Array("Domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","Sábado");
+		var montharray = new Array("Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+		
+		_("tooltip").innerHTML = "<strong>"+dayarray[w]+", "+d+" de "+montharray[m]+" de "+y+"</strong>";
 	}
+	
 }
 
-function loadDate(){
+function loadDate() {
+	
 	var date = new Date();
 	var d = date.getDate();
 	var m = date.getMonth() + 1;
 	var y = date.getFullYear();
-	if (d <= 9){ d = "0"+d	} else if (m <= 9) { m = "0"+m }
-	
+	if (d <= 9){ d = "0"+d };
+	if (m <= 9){ m = "0"+m };
 	var cdate = y + "-" + m + "-" + d;
 	_("date").value = cdate;
 	dateByExt(cdate);
+	
+}
+
+function insDB() {
+	
+	var date = _("date").value;
+	var table = _('addiht');
+	var rows = table.rows.length - 1;
+	for (x = 0; x < rows; x++) {
+		var select = _("sel"+x);
+		if (select) {
+			
+		}
+	}
+	
 }
 
 </script>
@@ -168,37 +208,56 @@ function loadDate(){
 <!-- ---------------- END   NAVBAR ---------------- -->
 <!-- ---------------- START OF BODY ---------------- -->
 <br /><br /><br />
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-4"></div>
 			<div class="col-md-4" align="center">
 				<div class="input-group">
-				
-				<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)">
-				 <span id="tooltip" class="input-group-addon"></span>
+					<input type="date" id="date" class="form-control" onChange="dateByExt(this.value)" />
+					<span id="tooltip" class="input-group-addon"></span>
 				</div>
 			</div>
 		<div class="col-md-4" align="center"></div>
 	</div>
 	<br /><br />
 </div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6"">
+			<p class="text-left">
+				<button id="statusbutton" type="button" class="btn btn-primary" onClick="addTable()">Inserir Linha <span class="glyphicon glyphicon-plus"></span></button>
+			</p>
+		</div>
+		<div class="col-md-6 push-right">
+			<p class="text-right">
+				<button type="button" class="btn btn-success" onClick="insDB()"><strong>Guardar</strong> <span class="glyphicon glyphicon-floppy-save	"></span></button>
+			</p>
+		</div>
+	</div>
+</div>	
+
+
 <div class="container">
 	<div class="row">
 		<div class="col-xl-12" align="center">
 			<div id="status_panel" class="panel panel-default" style="display: block">
 				<div id="status" class="panel-body"></div>
+				
 			</div>
+			
 		</div>
 	</div>
-<button onClick='addTable()'>Push2</button>
 </div>
-<div id="scripting"></div>
 <!-- ---------------- SCRIPT LOADING ---------------- -->
 
+	
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 <script src="../js/main.js"></script>
+
 
 <!-- ---------------- END OF SCRIPT LOADING ---------------- -->
 </body>

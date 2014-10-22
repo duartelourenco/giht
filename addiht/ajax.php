@@ -13,7 +13,7 @@
 		
 	echo "<tbody class='table-hover'>";
 	echo "<tr>";
-	echo "<td><select class='form-control'>";
+	echo "<td><select id='sel1' class='form-control'>";
 	while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
 		if ($row[1]!="Administrator"){
 			echo "<option value='".$row[0]."'>".$row[1]."</option>";
@@ -29,9 +29,6 @@
 	echo "</table>";
 	echo "</div>";
 
-	
-	echo "<button onClick='addRow()'>Push</button>";
-	
 	mysqli_close($con);
 
 	exit();
